@@ -29,6 +29,8 @@ run_continuously = True
 retweet_tweets = True
 like_tweets = True
 
+# Time in seconds to wait to bot run 
+time_to_wait = 10
 
 def CreateApi():
     consumer_key = os.getenv("CONSUMER_KEY")

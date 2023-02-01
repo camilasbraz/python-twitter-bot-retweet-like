@@ -1,8 +1,14 @@
 import os
 import logging
 from time import sleep
+import time
 import tweepy
 from config import *
+import traceback
+
+from schedule import *
+
+schedule()
 
 
 logging.basicConfig(format='%(levelname)s [%(asctime)s] %(message)s', datefmt='%m/%d/%Y %r', level=logging.INFO)
@@ -66,8 +72,18 @@ def process_tweets(api, tweets):
         # Delay in between processing tweets
         sleep(delay)
 
+def loop(api):
+    while True:
+        try:
+            tweets = get_tweets(api)
+            process_tweets(api, tweets)
+            time.sleep(time_to_wait)
+        except Exception as e:
+            print(f'\Exception:\n{e}\n\n{traceback.format_exc()}\n\n')
+            time.sleep(600)
+            continue
+
 
 if __name__ == "__main__":
     api = initialize_api()
-    tweets = get_tweets(api)
-    process_tweets(api, tweets)
+    loop(api)
